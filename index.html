@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI Champions Field Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A GUM-AI field guide for AI leaders who are starting or improving an AI champions network.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
+<style>
+/* Light edition with a dark overview map. Layout: fixed left rail that mirrors the 8-stage path; one linear column of stages, same template every time. */
+:root{
+  --bg:#f2f3ee; --surface:#fbfbf8; --sunk:#e8ece5; --ink:#132629; --muted:#53676a; --line:#d5dcd5;
+  --prog:#1c5f55; --prog-soft:#dcebe4; --champ:#94570c; --champ-soft:#f5e8d2;
+  --warn:#a3402c; --warn-soft:#f7e2dc; --gum:#d4437c; --gum-soft:#fae0ea;
+  --deep:#132629; --deep-2:#1e3d39; --deep-3:#3d3221; --on-deep:#e9f1ec; --on-deep-muted:#a8c1b7; --deep-line:rgba(255,255,255,.14);
+  --shadow:0 1px 2px rgba(19,38,41,.04),0 10px 28px rgba(19,38,41,.06);
+  --f-sans:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --rail:248px; --r:14px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:28px}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--prog);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--gum);outline-offset:3px;border-radius:4px}
+.mono{font-family:var(--f-mono)}
+.serif{font-family:var(--f-serif);font-style:italic;font-weight:400}
+
+/* ---------- GUM-AI mark ---------- */
+.gum{display:inline-flex;align-items:center;gap:8px;font:500 12px/1 var(--f-mono);letter-spacing:.06em;color:inherit;text-decoration:none;background:none;border:0;padding:0;cursor:pointer}
+.gum .dot{position:relative;width:10px;height:10px;border-radius:50%;background:var(--gum);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.gum:hover .dot{transform:scale(1.35)}
+.gum.blow .dot{animation:blow 1.1s ease-in forwards}
+@keyframes blow{0%{transform:scale(1)}70%{transform:scale(2.6);opacity:.9}82%{transform:scale(2.9);opacity:0}83%{transform:scale(.2);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* ---------- Rail ---------- */
+.rail{position:fixed;inset:0 auto 0 0;width:var(--rail);background:var(--deep);color:var(--on-deep);display:flex;flex-direction:column;
+  padding:30px 22px 26px max(22px,env(safe-area-inset-left,0px));z-index:5;overflow-y:auto}
+.rail .gum{color:var(--on-deep-muted)}
+.rail-title{margin-top:22px;font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.rail-title small{display:block;font:400 11px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--on-deep-muted);margin-top:8px}
+.rail nav{margin-top:34px;display:flex;flex-direction:column;gap:2px}
+.rail .grp{font:500 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--on-deep-muted);margin:16px 0 8px 10px}
+.rail .grp:first-child{margin-top:0}
+.rail nav a{display:flex;gap:12px;align-items:baseline;color:var(--on-deep-muted);text-decoration:none;font-size:13.5px;padding:7px 10px;border-radius:8px;transition:background .15s,color .15s}
+.rail nav a b{font:italic 400 16px/1 var(--f-serif);min-width:12px;color:inherit;opacity:.8}
+.rail nav a:hover{background:rgba(255,255,255,.06);color:var(--on-deep)}
+.rail nav a.on{background:rgba(255,255,255,.09);color:var(--on-deep)}
+.rail nav a.on[data-lane="prog"] b{color:#8fd6c4;opacity:1}
+.rail nav a.on[data-lane="champ"] b{color:#efbb73;opacity:1}
+.rail-foot{margin-top:auto;padding-top:22px;border-top:1px solid var(--deep-line);font-size:11.5px;line-height:1.5;color:var(--on-deep-muted)}
+.rail-foot a{color:var(--on-deep)}
+
+/* ---------- Main ---------- */
+main{margin-left:var(--rail);padding-block:48px 72px;padding-left:max(56px,env(safe-area-inset-left,0px));padding-right:max(56px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px}
+.eyebrow{font:500 11px/1.4 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Hero */
+.hero h1{font-size:clamp(40px,5.4vw,72px);line-height:1.0;letter-spacing:-.035em;font-weight:700;margin:20px 0 22px;max-width:900px}
+.hero h1 .serif{display:block}
+.hero h1 .serif{color:var(--prog);letter-spacing:-.02em}
+.lede{font-size:clamp(19px,1.9vw,23px);line-height:1.4;font-weight:500;letter-spacing:-.012em;max-width:760px}
+.lane-label em{font:italic 400 13px/1 var(--f-serif);letter-spacing:0;text-transform:none;color:var(--on-deep-muted);margin-left:4px}
+.ladder li.added .r::after{content:"+";font:500 10px/1 var(--f-mono);color:var(--gum);vertical-align:super;margin-left:1px}
+.oneline{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;max-width:820px;padding:20px 22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.oneline .tag{font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gum);padding-top:7px;white-space:nowrap}
+.oneline p{font-size:19px;line-height:1.45;font-weight:500;letter-spacing:-.01em}
+.intro{margin-top:12px;max-width:720px;color:var(--muted);font-size:16.5px}
+.paths{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.path{display:inline-flex;gap:8px;align-items:center;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13.5px;text-decoration:none}
+.path strong{font-weight:600}
+.path:hover{border-color:var(--prog)}
+.path.alt:hover{border-color:var(--gum)}
+
+/* Map */
+.map{margin-top:44px;background:var(--deep);color:var(--on-deep);border-radius:20px;padding:30px 30px 24px}
+.map-head{display:flex;justify-content:space-between;gap:20px;align-items:baseline;flex-wrap:wrap}
+.map-head h2{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.map-head p{font-size:12.5px;color:var(--on-deep-muted)}
+.lane-label{display:flex;align-items:center;gap:10px;margin:24px 0 12px;font:500 10px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#9fd8c9}
+.lane-label::after{content:"";flex:1;height:1px;background:var(--deep-line)}
+.lane-label.c{color:#f0c287}
+.lane{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.step{position:relative;display:block;text-decoration:none;color:var(--on-deep);background:var(--deep-2);border:1px solid rgba(143,214,196,.35);border-radius:12px;padding:15px 14px 16px;transition:transform .18s,background .18s}
+.lane.c .step{background:var(--deep-3);border-color:rgba(239,187,115,.35)}
+.step:hover{transform:translateY(-3px)}
+.step:not(:last-child)::after{content:"→";position:absolute;right:-14px;top:42%;color:var(--on-deep-muted);font-size:14px}
+.step .n{font:italic 400 22px/1 var(--f-serif);color:#8fd6c4}
+.lane.c .step .n{color:#efbb73}
+.step b{display:block;font-size:15px;font-weight:600;margin:8px 0 4px;letter-spacing:-.01em}
+.step small{display:block;font-size:12px;line-height:1.45;color:var(--on-deep-muted)}
+.bridge{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px;font:400 10.5px/1.4 var(--f-mono);color:var(--on-deep-muted);text-align:center}
+.loop{margin:16px 8px 0;border:1px dashed rgba(255,255,255,.25);border-top:0;border-radius:0 0 14px 14px;padding:12px 16px 10px;text-align:center;font-size:12px;color:var(--on-deep-muted)}
+.rules{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.rules span{font-size:12px;padding:6px 10px;border-radius:6px;background:rgba(255,255,255,.07);color:var(--on-deep)}
+
+/* Problem strip */
+.why{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:44px;padding-top:28px;border-top:1px solid var(--line)}
+.why h3{font-size:15px;font-weight:600;margin-bottom:6px}
+.why p{font-size:14px;color:var(--muted)}
+.why .k{font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px}
+
+/* Parts */
+.part{margin-top:84px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:end;padding-bottom:18px;border-bottom:2px solid var(--lane)}
+.part .pt{font:italic 400 64px/0.8 var(--f-serif);color:var(--lane)}
+.part h2{font-size:clamp(26px,3vw,34px);letter-spacing:-.025em;line-height:1.1}
+.part p{color:var(--muted);font-size:14.5px;margin-top:6px;max-width:680px}
+[data-lane="prog"]{--lane:var(--prog);--lane-soft:var(--prog-soft)}
+[data-lane="champ"]{--lane:var(--champ);--lane-soft:var(--champ-soft)}
+[data-lane="gum"]{--lane:var(--gum);--lane-soft:var(--gum-soft)}
+
+/* Stage template */
+.stage{margin-top:56px}
+.stage-head{display:grid;grid-template-columns:64px minmax(0,1fr);gap:18px;align-items:start}
+.stage-num{font:italic 400 58px/0.9 var(--f-serif);color:var(--lane)}
+.kicker{font:500 10.5px/1 var(--f-mono);letter-spacing:.13em;text-transform:uppercase;color:var(--lane);margin-bottom:9px}
+.stage-head h2{font-size:clamp(26px,2.8vw,32px);letter-spacing:-.025em;line-height:1.12}
+.inshort{margin-top:12px;font-size:17px;line-height:1.5;max-width:720px}
+.inshort::before{content:"In short";font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--lane);background:var(--lane-soft);padding:5px 7px;border-radius:4px;margin-right:10px;vertical-align:3px}
+.stage-body{margin-top:26px;margin-left:82px;display:flex;flex-direction:column;gap:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;box-shadow:var(--shadow);min-width:0}
+.panel h3{font-size:16px;font-weight:650;letter-spacing:-.01em;margin-bottom:8px}
+.lbl{display:inline-block;font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+ul.clean{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+ul.clean li{position:relative;padding-left:18px;font-size:14.5px;line-height:1.5}
+ul.clean li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--lane)}
+ul.clean li b{font-weight:600}
+.cols{display:grid;gap:18px}
+.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.note{font-size:13.5px;line-height:1.5;padding:12px 16px;border-radius:10px;background:var(--lane-soft);color:var(--ink)}
+.note b{font-weight:600}
+.note.warn{background:var(--warn-soft)}
+
+/* Role matrix */
+.spectrum-bar{display:flex;justify-content:space-between;font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-left:150px}
+.spectrum-bar span:nth-child(2){color:var(--muted)}
+.spectrum-line{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--prog),var(--champ));margin:0 0 8px 150px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:13.5px;line-height:1.5}
+th,td{padding:14px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{background:var(--sunk);font-weight:600;font-size:14.5px}
+thead th small{display:block;font:500 10px/1.4 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+thead th p{font-weight:400;font-size:12.5px;color:var(--muted);margin-top:6px}
+tbody th{width:118px;font:500 10.5px/1.4 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+tbody tr:last-child>*{border-bottom:0}
+.chip{display:inline-block;font:500 10px/1 var(--f-mono);letter-spacing:.06em;padding:4px 7px;border-radius:4px;margin-bottom:6px}
+.chip.a{background:var(--prog-soft);color:var(--prog)}
+.chip.b{background:var(--sunk);color:var(--ink)}
+.chip.c{background:var(--champ-soft);color:var(--champ)}
+
+/* Charter */
+.charter{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--line)}
+.charter div{padding:15px 18px 15px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px}
+.charter div:nth-child(odd){padding-right:24px;border-right:1px solid var(--line)}
+.charter div:nth-child(even){padding-left:24px}
+.charter i{font:italic 400 18px/1.2 var(--f-serif);color:var(--lane)}
+.charter b{display:block;font-size:14.5px;font-weight:600;margin-bottom:2px}
+.charter span{font-size:13.5px;color:var(--muted)}
+
+/* Selection */
+.sel h3{display:flex;align-items:center;gap:8px}
+.sel .ico{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:13px;font-weight:700}
+.sel.look .ico{background:var(--prog-soft);color:var(--prog)}
+.sel.req .ico{background:var(--sunk);color:var(--ink)}
+.sel.avoid .ico{background:var(--warn-soft);color:var(--warn)}
+.sel.avoid ul.clean li::before{background:var(--warn);border-radius:50%}
+.sel.req ul.clean li::before{background:var(--muted)}
+
+/* Sponsors */
+.sponsor{display:grid;gap:10px}
+.sp-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.node{padding:14px 15px;border-radius:11px;border:1px solid var(--line);background:var(--sunk)}
+.node b{display:block;font-size:14px;font-weight:600}
+.node small{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+.node.p1{background:var(--prog-soft);border-color:transparent}
+.node.p2{background:var(--champ-soft);border-color:transparent}
+.node.hub{background:var(--deep);color:var(--on-deep);text-align:center;border-color:transparent}
+.node.hub small{color:var(--on-deep-muted)}
+.edge{text-align:center;font:400 11px/1.3 var(--f-mono);color:var(--muted)}
+.sp-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+
+/* Opportunity brief */
+.brief{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+.form{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.form-top{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--sunk);border-bottom:1px solid var(--line);font:500 10.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.field{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;padding:12px 18px;border-bottom:1px dashed var(--line);font-size:13.5px}
+.field:last-child{border-bottom:0}
+.field b{font-weight:600}
+.field span{color:var(--muted)}
+
+/* Decision */
+.decide{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:18px}
+.gate{background:var(--deep);color:var(--on-deep);border-radius:var(--r);padding:24px}
+.gate .lbl{color:var(--on-deep-muted)}
+.gate h3{font-size:24px;font-weight:650;letter-spacing:-.02em;line-height:1.15;margin-bottom:14px}
+.gate ul.clean li{font-size:14px}
+.gate ul.clean li::before{background:#efbb73}
+.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:18px}
+.opts span{text-align:center;font:500 11.5px/1 var(--f-mono);padding:10px 4px;border:1px solid rgba(255,255,255,.22);border-radius:7px}
+.opts span:nth-child(3){background:rgba(239,187,115,.18);border-color:rgba(239,187,115,.5)}
+.gate p{font-size:12.5px;color:var(--on-deep-muted);margin-top:12px}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ladder li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 16px}
+.ladder .r{font:italic 400 22px/1 var(--f-serif);color:var(--lane)}
+.ladder b{display:block;font-size:14.5px;font-weight:600}
+.ladder p{font-size:12.5px;color:var(--muted)}
+.ladder .cost{display:flex;gap:3px}
+.ladder .cost i{width:6px;height:14px;border-radius:2px;background:var(--line)}
+.ladder .cost i.f{background:var(--champ)}
+.ladder-cap{display:flex;justify-content:space-between;font:400 10.5px/1 var(--f-mono);color:var(--muted);margin-top:8px}
+
+/* Spec grid */
+.spec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.spec article{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.spec .sn{font:italic 400 20px/1 var(--f-serif);color:var(--lane)}
+.spec h4{font-size:14.5px;font-weight:600;margin:8px 0 5px}
+.spec p{font-size:13px;color:var(--muted);line-height:1.5}
+.spec article.stop{background:var(--champ-soft);border-color:transparent}
+
+/* Value chain */
+.chain{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.chain div{position:relative;background:var(--lane-soft);padding:12px 10px 12px 18px;font-size:12px;line-height:1.4;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%)}
+.chain div:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);padding-left:12px}
+.chain b{display:block;font:500 10px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--lane);margin-bottom:4px}
+.chain span{color:var(--ink)}
+
+/* Lasting */
+.lasting{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:26px}
+.lasting .panel h3{font-size:17px}
+.lasting .panel p{font-size:14px;color:var(--muted)}
+
+/* Health check */
+.hc{margin-top:26px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+.hc-list{display:flex;flex-direction:column;gap:8px}
+.hc-item{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
+.hc-item:hover{border-color:var(--muted)}
+.hc-item .hn{font:italic 400 20px/1 var(--f-serif);color:var(--muted)}
+.hc-item[data-lane="prog"] .hn{color:var(--prog)}
+.hc-item[data-lane="champ"] .hn{color:var(--champ)}
+.hc-item span.t{font-size:14px;line-height:1.45}
+.hc-item .box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);display:grid;place-items:center;font-size:13px;color:transparent;transition:all .15s}
+.hc-item[aria-pressed="true"]{background:var(--lane-soft);border-color:transparent}
+.hc-item[aria-pressed="true"] .box{background:var(--lane);border-color:var(--lane);color:var(--surface)}
+.hc-result{position:sticky;top:24px;background:var(--deep);color:var(--on-deep);border-radius:var(--r);padding:22px}
+.hc-result .lbl{color:var(--on-deep-muted)}
+.score{font:600 44px/1 var(--f-sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.score small{font-size:16px;color:var(--on-deep-muted);font-weight:400}
+.meter{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:14px 0 16px}
+.meter i{height:8px;border-radius:3px;background:rgba(255,255,255,.12);transition:background .2s}
+.meter i.on.p{background:#8fd6c4}
+.meter i.on.c{background:#efbb73}
+.hc-msg{font-size:14px;line-height:1.5;color:var(--on-deep)}
+.hc-msg a{color:#efbb73}
+.reset{margin-top:16px;background:none;border:1px solid rgba(255,255,255,.25);color:var(--on-deep-muted);font:500 11px/1 var(--f-mono);padding:8px 10px;border-radius:6px;cursor:pointer}
+.reset:hover{color:var(--on-deep)}
+
+/* Footer */
+footer{margin-top:84px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+footer .gum{color:var(--ink)}
+footer p{max-width:620px}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1180px){
+  :root{--rail:212px}
+  main{padding-left:max(36px,env(safe-area-inset-left,0px));padding-right:max(36px,env(safe-area-inset-right,0px))}
+  .stage-body{margin-left:0}
+  .decide,.brief,.hc{grid-template-columns:minmax(0,1fr)}
+  .hc-result{position:static}
+  .chain{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:6px}
+}
+@media (max-width:860px){
+  .rail{position:static;width:auto;padding:20px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+  .rail-title{margin-top:14px;font-size:19px}
+  .rail-title small{display:none}
+  .rail nav{flex-direction:row;overflow-x:auto;margin-top:14px;gap:4px;padding-bottom:4px}
+  .rail .grp{display:none}
+  .rail nav a{white-space:nowrap;font-size:12.5px;padding:7px 9px;background:rgba(255,255,255,.05)}
+  .rail-foot{display:none}
+  main{margin-left:0;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .lane,.bridge{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .step:nth-child(2)::after{display:none}
+  .bridge{display:none}
+  .why,.c3,.spec{grid-template-columns:minmax(0,1fr)}
+  .c2,.lasting,.charter{grid-template-columns:minmax(0,1fr)}
+  .charter div:nth-child(odd){border-right:0;padding-right:0}
+  .charter div:nth-child(even){padding-left:0}
+  .stage-head{grid-template-columns:44px minmax(0,1fr);gap:12px}
+  .stage-num{font-size:44px}
+  .spectrum-bar,.spectrum-line{padding-left:0;margin-left:0}
+  .map{padding:22px 16px 18px}
+  .oneline{grid-template-columns:minmax(0,1fr);gap:8px}
+  .oneline .tag{padding-top:0}
+  .oneline p{font-size:17px}
+  .part .pt{font-size:48px}
+}
+@media (max-width:520px){
+  .lane{grid-template-columns:minmax(0,1fr)}
+  .step::after{display:none!important}
+  .sp-pair,.sp-three{grid-template-columns:minmax(0,1fr)}
+  .field{grid-template-columns:minmax(0,1fr);gap:2px}
+  .chain{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ladder li{grid-template-columns:28px minmax(0,1fr)}
+  .ladder .cost{display:none}
+  .panel{padding:18px}
+}
+
+/* ---------- Light edition overrides (overview map stays dark) ---------- */
+:root{color-scheme:light;--bg:#f5f6f2;--surface:#ffffff;--rail-bg:#ecefe8}
+.rail{background:var(--rail-bg);color:var(--ink);border-right:1px solid var(--line)}
+.rail .gum,.rail-title small,.rail .grp{color:var(--muted)}
+.rail nav a{color:var(--muted)}
+.rail nav a:hover{background:var(--surface);color:var(--ink)}
+.rail nav a.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.rail nav a.on[data-lane="prog"] b{color:var(--prog)}
+.rail nav a.on[data-lane="champ"] b{color:var(--champ)}
+.rail-foot{border-top-color:var(--line);color:var(--muted)}
+.rail-foot a{color:var(--prog)}
+.node.hub{background:var(--surface);color:var(--ink);border:2px solid var(--ink)}
+.node.hub small{color:var(--muted)}
+.gate{background:var(--champ-soft);color:var(--ink)}
+.gate .lbl,.gate p{color:var(--muted)}
+.gate ul.clean li::before{background:var(--champ)}
+.opts span{border-color:rgba(148,87,12,.35);background:var(--surface)}
+.opts span:nth-child(3){background:var(--champ);border-color:var(--champ);color:#fff}
+.hc-result{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow)}
+.hc-result .lbl,.score small{color:var(--muted)}
+.meter i{background:var(--sunk)}
+.meter i.on.p{background:var(--prog)}
+.meter i.on.c{background:var(--champ)}
+.hc-msg{color:var(--ink)}
+.hc-msg a{color:var(--champ)}
+.reset{border-color:var(--line);color:var(--muted)}
+.reset:hover{color:var(--ink)}
+@media (max-width:860px){.rail{border-right:0;border-bottom:1px solid var(--line)}.rail nav a{background:var(--surface)}}
+@media (max-width:620px){.lane-label{flex-wrap:wrap;line-height:1.4}.lane-label em{flex-basis:100%;margin:2px 0 0}.lane-label::after{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<aside class="rail" aria-label="Guide navigation">
+  <button class="gum" type="button" data-gum aria-label="GUM-AI">GUM-AI<span class="dot" aria-hidden="true"></span></button>
+  <div class="rail-title">AI Champions Program<small>Field guide · 8 stages</small></div>
+  <nav>
+    <div class="grp">Start</div>
+    <a href="#top" data-lane="prog"><b>·</b>Overview</a>
+    <div class="grp">I · Program setup</div>
+    <a href="#s1" data-lane="prog"><b>1</b>Define the job</a>
+    <a href="#s2" data-lane="prog"><b>2</b>Choose the people</a>
+    <a href="#s3" data-lane="prog"><b>3</b>Train on real work</a>
+    <a href="#s4" data-lane="prog"><b>4</b>Keep it alive</a>
+    <div class="grp">II · Use case delivery</div>
+    <a href="#s5" data-lane="champ"><b>5</b>Find worthwhile work</a>
+    <a href="#s6" data-lane="champ"><b>6</b>Choose the response</a>
+    <a href="#s7" data-lane="champ"><b>7</b>Make it testable</a>
+    <a href="#s8" data-lane="champ"><b>8</b>Deploy &amp; sustain</a>
+    <div class="grp">Finish</div>
+    <a href="#lasting" data-lane="champ"><b>·</b>What stays true</a>
+    <a href="#check" data-lane="champ"><b>·</b>Health check</a>
+  </nav>
+  <div class="rail-foot">A GUM-AI synthesis of <a href="https://www.youtube.com/watch?v=wdXF-5nn-T4" target="_blank" rel="noopener">The AI Daily Brief</a> episode “How to Go from AI Power User to AI Leader.”</div>
+</aside>
+
+<main>
+<div class="wrap">
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <p class="eyebrow">A GUM-AI field guide</p>
+  <h1>AI Champions Program <span class="serif">Field Guide</span></h1>
+  <p class="lede">Eight stages in two parts. First, set up the program. Then, help each champion take real use cases from idea to value.</p>
+  <p class="intro">For AI leaders who are starting a champions network, or fixing one that has lost momentum.</p>
+  <div class="paths">
+    <a class="path" href="#s1"><strong>Starting a network?</strong> Read top to bottom ↓</a>
+    <a class="path alt" href="#check"><strong>Improving one?</strong> Run the health check first ↓</a>
+  </div>
+
+  <div class="map" aria-label="The eight-stage operating loop">
+    <div class="map-head"><h2>Two parts, eight stages</h2><p>Select a stage to go to it.</p></div>
+    <div class="lane-label">Part I · Program setup<em>owned by the AI leader and sponsors</em></div>
+    <div class="lane">
+      <a class="step" href="#s1"><span class="n">1</span><b>Define the job</b><small>Purpose, build rights, boundaries with central teams.</small></a>
+      <a class="step" href="#s2"><span class="n">2</span><b>Choose the people</b><small>AI skill, peer trust, business fluency, real time.</small></a>
+      <a class="step" href="#s3"><span class="n">3</span><b>Train on real work</b><small>Prove readiness on a team use case.</small></a>
+      <a class="step" href="#s4"><span class="n">4</span><b>Keep it alive</b><small>Two sponsors, managers, rhythm, renewal.</small></a>
+    </div>
+    <div class="bridge" aria-label="What Part I gives Part II"><span>↓ mandate &amp; permissions</span><span>↓ time &amp; local knowledge</span><span>↓ delivery judgment</span><span>↓ access &amp; support</span></div>
+    <div class="lane-label c">Part II · Use case delivery<em>owned by each champion</em></div>
+    <div class="lane c">
+      <a class="step" href="#s5"><span class="n">5</span><b>Find worthwhile work</b><small>Who has the problem, how often, what improves.</small></a>
+      <a class="step" href="#s6"><span class="n">6</span><b>Choose the response</b><small>Reuse, buy, build, or defer. Simplest form wins.</small></a>
+      <a class="step" href="#s7"><span class="n">7</span><b>Make it testable</b><small>User, knowledge, guardrails, human checks, tests.</small></a>
+      <a class="step" href="#s8"><span class="n">8</span><b>Deploy &amp; sustain</b><small>Real use, support, trust, value, retirement.</small></a>
+    </div>
+    <div class="loop">↶ What champions learn in delivery feeds the next use case, the training, and the role design.</div>
+    <div class="rules"><span>Build work sits inside the mandate, not outside it.</span><span>Certification starts the work. It does not finish it.</span></div>
+  </div>
+
+  <div class="why">
+    <div><span class="k">The problem</span><h3>Wins stay local</h3><p>Useful AI discoveries often reach only one or two colleagues. Better tool knowledge alone does not make them spread.</p></div>
+    <div><span class="k">The fix</span><h3>A trusted peer, one step ahead</h3><p>A champion sits inside the team’s real work, formally named or already doing it informally, and makes local wins into shared practice.</p></div>
+    <div><span class="k">The skill</span><h3>Influence, not authority</h3><p>Strong tool use is not the same as teaching. Champions show everyday examples and methods others can reuse. This holds for small teams too.</p></div>
+  </div>
+</header>
+
+<!-- ================= PART I ================= -->
+<div class="part" data-lane="prog">
+  <span class="pt">I</span>
+  <div><h2>Program setup</h2><p>Create the conditions. The AI leader and sponsors own these four stages. Without them, strong individuals cannot become a working network.</p></div>
+</div>
+
+<!-- Stage 1 -->
+<section class="stage" id="s1" data-lane="prog">
+  <div class="stage-head">
+    <div class="stage-num">1</div>
+    <div><p class="kicker">Part I · stage 1 of 8</p><h2>Define the job</h2>
+    <p class="inshort">Decide what the network is for and how far champions may go. Then write it down with IT, security, and the other decision-makers.</p></div>
+  </div>
+  <div class="stage-body">
+    <div>
+      <span class="lbl">Pick a position on the role spectrum</span>
+      <div class="spectrum-bar" aria-hidden="true"><span>Adoption-led</span><span>Common middle</span><span>Build-led</span></div>
+      <div class="spectrum-line" aria-hidden="true"></div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th scope="col"></th>
+            <th scope="col">Ambassador<small>Adoption &amp; representation</small><p>A strong AI user who shows real use cases, helps peers, and brings needs to the right owners.</p></th>
+            <th scope="col">Ambassador–builder<small>Bounded local delivery</small><p>Builds for self and immediate team within guardrails. Acts like a product manager beyond that line.</p></th>
+            <th scope="col">Internal FDE<small>Embedded forward-deployed builder</small><p>A professional, or an enabled subject expert, embedded in a business team.</p></th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Before the build</th><td>Find the use case. Explain the pain and the cost. Write a clear request.</td><td>Same discovery and business framing.</td><td>Frame the problem, the plan, and the business value.</td></tr>
+            <tr><th scope="row">During the build</th><td><span class="chip a">Hand off</span><br>A central team or vendor builds it.</td><td><span class="chip b">Build within scope</span><br>Makes a team-level version. Another team may productize it.</td><td><span class="chip c">Build end to end</span><br>Takes it to production, within company controls.</td></tr>
+            <tr><th scope="row">After the build</th><td>Help the team adopt it. Check that the value is real.</td><td>Return for deployment and adoption after any handoff.</td><td>Own the full lifecycle, including value realization.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="note"><b>Same task, different owner.</b> A team spends hours each week on a customer-renewal summary. All three roles can take it on. What changes is who builds and who gets the handoff. So do not train or judge every champion like a full-time engineer.</p>
+
+    <div class="panel">
+      <span class="lbl">Write the charter: answer six questions</span>
+      <div class="charter">
+        <div><i>1</i><p><b>Purpose</b><span>What result? A use-case funnel to a central team, broad adoption, local build capacity, or a mix. Structure and training follow this choice.</span></p></div>
+        <div><i>2</i><p><b>Build rights</b><span>Who may build for themselves, for others, or only use? Make this a deliberate choice, not an accident of tool access.</span></p></div>
+        <div><i>3</i><p><b>Everyone else</b><span>What do you expect from people who are not champions? The program changes their job too.</span></p></div>
+        <div><i>4</i><p><b>Spread</b><span>How will what is built reach people in the field? Champions and tools alone are not a mechanism.</span></p></div>
+        <div><i>5</i><p><b>Central teams &amp; vendors</b><span>How do champions work with tool owners, IT, security, specialist builders, and suppliers? Decide this even with no central AI team.</span></p></div>
+        <div><i>6</i><p><b>Incentives</b><span>Do rewards and expectations match the company’s AI strategy?</span></p></div>
+      </div>
+      <p class="small muted" style="margin-top:14px">Revisit the scope as you learn. The right level of decentralization changes over time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 2 -->
+<section class="stage" id="s2" data-lane="prog">
+  <div class="stage-head">
+    <div class="stage-num">2</div>
+    <div><p class="kicker">Part I · stage 2 of 8</p><h2>Choose the people</h2>
+    <p class="inshort">Pick people who already do the job informally, and whose manager will give them real time to do it.</p></div>
+  </div>
+  <div class="stage-body">
+    <div class="cols c3">
+      <div class="panel sel look"><h3><span class="ico" aria-hidden="true">✓</span>Look for evidence</h3>
+        <ul class="clean"><li>Uses AI well without being told to</li><li>Peers already ask them for help</li><li>Knows the business and its pain points</li><li>Initiative and curiosity</li><li>Influence without formal authority</li><li>Keeps learning as the field changes</li></ul></div>
+      <div class="panel sel req"><h3><span class="ico" aria-hidden="true">!</span>Require</h3>
+        <ul class="clean"><li><b>Real capacity.</b> The manager frees time to help others, not only for the champion’s own tasks. One or two days is the episode’s example, not a rule.</li><li><b>A career path.</b> The title raises a person’s profile, inside and outside. Pick people you want to keep and promote.</li><li><b>A manager who knows</b> how to use the champion.</li></ul></div>
+      <div class="panel sel avoid"><h3><span class="ico" aria-hidden="true">×</span>Avoid four traps</h3>
+        <ul class="clean"><li><b>The senior self-nominee.</b> Strategic leaders belong in steering, not peer building.</li><li><b>The brilliant but busy.</b> Capacity is part of the fit, not a detail for later.</li><li><b>The reward nominee.</b> Good general performance does not replace AI skill.</li><li><b>The brand-new hire.</b> Without business context they cannot spot good use cases.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 3 -->
+<section class="stage" id="s3" data-lane="prog">
+  <div class="stage-head">
+    <div class="stage-num">3</div>
+    <div><p class="kicker">Part I · stage 3 of 8</p><h2>Train on real work</h2>
+    <p class="inshort">Train the full role, not only the tools. Each champion proves readiness by moving one real team use case forward.</p></div>
+  </div>
+  <div class="stage-body">
+    <div class="cols c2">
+      <div class="panel"><h3>How to train</h3>
+        <ul class="clean">
+          <li><b>Any format works:</b> internal sessions, a bootcamp, or gradual learning. Anchor it on the team’s own work. Even excellent users need preparation.</li>
+          <li><b>Readiness test:</b> by the end, each person has advanced or built one real use case. No progress means more preparation.</li>
+          <li><b>Mark the start:</b> a kickoff or certification creates energy. The real test is the day after.</li>
+        </ul></div>
+      <div class="panel"><h3>What to teach</h3>
+        <ul class="clean">
+          <li><b>Judgment across business, technology, and people:</b> use-case selection, evaluation, adoption, and handoff.</li>
+          <li><b>Not only experimentation.</b> Trying tools teaches tool use. It rarely teaches how to evaluate.</li>
+          <li><b>Why invest here:</b> training a small group spreads locally relevant skill further. This is the hosts’ experience, not a measured ROI.</li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 4 -->
+<section class="stage" id="s4" data-lane="prog">
+  <div class="stage-head">
+    <div class="stage-num">4</div>
+    <div><p class="kicker">Part I · stage 4 of 8</p><h2>Keep it alive</h2>
+    <p class="inshort">Give the network two sponsors, a steady rhythm, and an easy way in and out. Name an owner for what happens after launch.</p></div>
+  </div>
+  <div class="stage-body">
+    <div class="cols c2">
+      <div class="panel">
+        <span class="lbl">The sponsor pair: two functions, not two job titles</span>
+        <div class="sponsor">
+          <div class="sp-pair">
+            <div class="node p1"><b>Community sponsor</b><small>Often HR, L&amp;D, or People. Keeps participation, learning, and recognition alive.</small></div>
+            <div class="node p2"><b>AI sponsor</b><small>Links to the chief AI officer or equal. Sets priorities, clears access and approvals, bridges to IT and security.</small></div>
+          </div>
+          <div class="edge">↓ stay close to what champions need and build ↓</div>
+          <div class="node hub"><b>Embedded champions</b><small>Trusted colleagues who know the team’s work</small></div>
+          <div class="edge">↕ a working relationship both ways ↕</div>
+          <div class="sp-three">
+            <div class="node"><b>Managers</b><small>Protect time; know how to use the role</small></div>
+            <div class="node"><b>Peers</b><small>Bring problems; use and share results</small></div>
+            <div class="node"><b>Central teams</b><small>Tools, security, specialist builds</small></div>
+          </div>
+        </div>
+        <p class="small muted" style="margin-top:12px">The strongest example in the episode: an L&amp;D expert and an AI expert working as a pair.</p>
+      </div>
+      <div class="panel"><h3>The rhythm after launch</h3>
+        <ul class="clean">
+          <li>Regular meetings and an easy way to share work</li>
+          <li>Learning together, including new tools and methods</li>
+          <li>Celebrate outcomes that match the purpose, not activity</li>
+          <li>A short manager briefing: the role, the expected output, how to use it. Mismatched expectations frustrate both sides.</li>
+          <li>Normal entry, exit, and handover when the role no longer fits</li>
+          <li>Continuous education, not a one-time course</li>
+          <li><b>A named owner for continuation.</b> Without follow-through, people go back to old ways of working.</li>
+        </ul></div>
+    </div>
+    <p class="note warn"><b>Restarting a tired network?</b> Fix the conditions before you plan another training event. Restore both sponsors, check real capacity with managers, renew commitments, let people leave with respect, and bring new people in.</p>
+  </div>
+</section>
+
+<!-- ================= PART II ================= -->
+<div class="part" data-lane="champ">
+  <span class="pt">II</span>
+  <div><h2>Use case delivery</h2><p>Turn real work into used, trusted solutions. Each champion owns these four stages, or hands them off according to the charter. They need not do every step, but they must understand the whole path: before the build, proof of concept to production, deployment, value, and retirement.</p></div>
+</div>
+
+<!-- Stage 5 -->
+<section class="stage" id="s5" data-lane="champ">
+  <div class="stage-head">
+    <div class="stage-num">5</div>
+    <div><p class="kicker">Part II · stage 5 of 8</p><h2>Find worthwhile work</h2>
+    <p class="inshort">Start with a real, recurring problem, not a tool. Know what the company permits before you plan anything.</p></div>
+  </div>
+  <div class="stage-body">
+    <div class="brief">
+      <div class="form" role="group" aria-label="Opportunity brief">
+        <div class="form-top"><span>Opportunity brief</span><span>fill before any build</span></div>
+        <div class="field"><b>Who has the problem?</b><span>Name the people, not “everyone.”</span></div>
+        <div class="field"><b>How often?</b><span>Recurring work earns investment. One-offs rarely do.</span></div>
+        <div class="field"><b>What does done look like?</b><span>The end state, in the team’s words.</span></div>
+        <div class="field"><b>What does it cost today?</b><span>Time, effort, quality. This is your baseline.</span></div>
+        <div class="field"><b>Which KPI does it move?</b><span>Link it to a real company performance indicator.</span></div>
+        <div class="field"><b>Does it already exist?</b><span>Check before you build a copy somewhere else.</span></div>
+        <div class="field"><b>Is it permitted?</b><span>Tools, data, and actions the company allows.</span></div>
+      </div>
+      <div class="panel"><h3>Be conservative</h3>
+        <p class="small muted" style="margin-bottom:12px">Enthusiasm is not a business case.</p>
+        <ul class="clean">
+          <li>Assume the cost will be higher than your first estimate.</li>
+          <li>Assume early value will be lower than you hope.</li>
+          <li>State expected benefit against cost, and how people will actually use it.</li>
+          <li>Say what evidence will show the goal was met.</li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 6 -->
+<section class="stage" id="s6" data-lane="champ">
+  <div class="stage-head">
+    <div class="stage-num">6</div>
+    <div><p class="kicker">Part II · stage 6 of 8</p><h2>Choose the response</h2>
+    <p class="inshort">Building is only one option. If you do build, pick the simplest form that works.</p></div>
+  </div>
+  <div class="stage-body">
+    <div class="decide">
+      <div class="gate">
+        <span class="lbl">First: should it exist?</span>
+        <h3>Is this worth doing at all?</h3>
+        <ul class="clean">
+          <li>Is it a concrete, recurring problem?</li>
+          <li>Is the value worth the investment?</li>
+          <li>What would a mistake cost, and can the work tolerate errors?</li>
+          <li>Does something usable already exist?</li>
+        </ul>
+        <div class="opts"><span>Reuse</span><span>Buy</span><span>Build</span><span>Defer</span></div>
+        <p>Choose for the company’s needs, not because the build is exciting. Watch for a bias toward building.</p>
+      </div>
+      <div>
+        <span class="lbl">Then: match the form to the need</span>
+        <ol class="ladder">
+          <li><span class="r">1</span><div><b>Shared chat setup</b><p>Reusable instructions, prompts, and files. Often enough.</p></div><span class="cost" aria-label="Upkeep 1 of 5"><i class="f"></i><i></i><i></i><i></i><i></i></span></li>
+          <li><span class="r">2</span><div><b>Skill or playbook</b><p>A repeatable method people invoke when needed.</p></div><span class="cost" aria-label="Upkeep 2 of 5"><i class="f"></i><i class="f"></i><i></i><i></i><i></i></span></li>
+          <li class="added"><span class="r">3</span><div><b>Shared tool or artifact</b><p>A small app, page, or custom assistant others open and use. It needs an owner who keeps it current.</p></div><span class="cost" aria-label="Upkeep 3 of 5"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></span></li>
+          <li><span class="r">4</span><div><b>Automation</b><p>Fixed steps that run the same way each time.</p></div><span class="cost" aria-label="Upkeep 4 of 5"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span></li>
+          <li><span class="r">5</span><div><b>Agent</b><p>Only when the need justifies it. Never the default.</p></div><span class="cost" aria-label="Upkeep 5 of 5"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span></li>
+        </ol>
+        <div class="ladder-cap"><span>Not a maturity ladder · <span style="color:var(--gum)">+</span> GUM-AI addition</span><span>bars = build, upkeep, testing, risk</span></div>
+        <p class="small muted" style="margin-top:12px">Each step up adds more to build, maintain, and test. Require a reason before you climb.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 7 -->
+<section class="stage" id="s7" data-lane="champ">
+  <div class="stage-head">
+    <div class="stage-num">7</div>
+    <div><p class="kicker">Part II · stage 7 of 8</p><h2>Make it testable</h2>
+    <p class="inshort">Write the spec before the build. It becomes the handoff for a vendor, a central team, or the champion. Let the tests stop a weak idea early.</p></div>
+  </div>
+  <div class="stage-body">
+    <div class="spec">
+      <article><span class="sn">1</span><h4>A specific user</h4><p>A solution for everyone has no useful design target.</p></article>
+      <article><span class="sn">2</span><h4>The knowledge it needs</h4><p>Check the material exists and is usable. Curation can be a project of its own.</p></article>
+      <article><span class="sn">3</span><h4>A real path into use</h4><p>Design for how people will find and use it, not only for a finished app.</p></article>
+      <article><span class="sn">4</span><h4>What it must never do</h4><p>List prohibited actions in detail. Starting here often reveals hidden requirements.</p></article>
+      <article><span class="sn">5</span><h4>Where humans decide</h4><p>Name who reviews outputs and which decisions stay with people.</p></article>
+      <article class="stop"><span class="sn">6</span><h4>Evidence that it works</h4><p>Write test cases early, including hard edge cases. If you cannot reach enough quality, stop.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 8 -->
+<section class="stage" id="s8" data-lane="champ">
+  <div class="stage-head">
+    <div class="stage-num">8</div>
+    <div><p class="kicker">Part II · stage 8 of 8</p><h2>Deploy &amp; sustain</h2>
+    <p class="inshort">Value is real only when the right people use it, often enough, and trust it. Stay involved until that happens.</p></div>
+  </div>
+  <div class="stage-body">
+    <div class="cols c2">
+      <div class="panel"><h3>Put it into real work</h3>
+        <ul class="clean">
+          <li><b>Right people, right frequency, right workflow.</b> Publishing a tool is not deployment.</li>
+          <li><b>Name the home, the approver, and the support</b> for after the launch excitement fades.</li>
+          <li><b>Stay to the end.</b> A handoff to specialists does not end the champion’s part. Return for deployment and adoption.</li>
+        </ul></div>
+      <div class="panel"><h3>Judge it honestly</h3>
+        <ul class="clean">
+          <li><b>Know the trust limits:</b> when outputs are good enough, when they are not, and what errors cost. Release judgment is a core skill.</li>
+          <li><b>Retire it</b> when it cannot meet quality needs or no longer pays back.</li>
+        </ul></div>
+    </div>
+    <div class="panel">
+      <span class="lbl">Evidence chain: from problem to proven value</span>
+      <div class="chain">
+        <div><b>Problem</b><span>Who, how often, what success is</span></div>
+        <div><b>Baseline</b><span>Today’s effort and quality</span></div>
+        <div><b>Outcome</b><span>The KPI it should move</span></div>
+        <div><b>Acceptance</b><span>Quality and risk tested</span></div>
+        <div><b>Adoption</b><span>Real people, real use</span></div>
+        <div><b>Realization</b><span>Gain vs. cost, then revisit</span></div>
+      </div>
+      <p class="small muted" style="margin-top:12px">A GUM-AI aid to put the episode’s ideas into practice. Set your own thresholds and review cadence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LASTING ================= -->
+<section id="lasting" style="margin-top:84px">
+  <div class="part" data-lane="gum" style="margin-top:0">
+    <span class="pt">∞</span>
+    <div><h2>What stays true as tools change</h2><p>Keep tool training current. These needs do not go away when the tools improve.</p></div>
+  </div>
+  <div class="lasting">
+    <div class="panel"><h3>The fundamentals hold</h3><p>The right people with time, an explicit role scope, an understanding of the full lifecycle, and ownership after training.</p></div>
+    <div class="panel"><h3>Enable subject experts</h3><p>Do not simply block nontraditional builders. They often see the best use cases. Give them training, infrastructure, scope, and guardrails.</p></div>
+    <div class="panel"><h3>More capable agents need more governance</h3><p>As coding and agents reach across systems, plan for containment, access, security, quality, and where people must decide.</p></div>
+    <div class="panel"><h3>The role builds careers</h3><p>Champions see the beginning and the end of delivery, not only the build. That makes the role a strong development path.</p></div>
+  </div>
+</section>
+
+<!-- ================= HEALTH CHECK ================= -->
+<section id="check" style="margin-top:84px">
+  <div class="part" data-lane="gum" style="margin-top:0">
+    <span class="pt">✓</span>
+    <div><h2>Health check</h2><p>One statement per stage. Mark each one that is true for your network today. The first gap is where to start.</p></div>
+  </div>
+  <div class="hc">
+    <div class="hc-list" id="hc-list">
+      <button type="button" class="hc-item" id="hc1" data-lane="prog" data-s="s1" aria-pressed="false"><span class="hn">1</span><span class="t">Our charter is written down. It says who may build what, and how champions work with central teams.</span><span class="box" aria-hidden="true">✓</span></button>
+      <button type="button" class="hc-item" id="hc2" data-lane="prog" data-s="s2" aria-pressed="false"><span class="hn">2</span><span class="t">Every champion has peer trust, business context, and time their manager protects.</span><span class="box" aria-hidden="true">✓</span></button>
+      <button type="button" class="hc-item" id="hc3" data-lane="prog" data-s="s3" aria-pressed="false"><span class="hn">3</span><span class="t">Each champion moved a real team use case forward during training.</span><span class="box" aria-hidden="true">✓</span></button>
+      <button type="button" class="hc-item" id="hc4" data-lane="prog" data-s="s4" aria-pressed="false"><span class="hn">4</span><span class="t">A community sponsor and an AI sponsor are both active, and people can join or leave easily.</span><span class="box" aria-hidden="true">✓</span></button>
+      <button type="button" class="hc-item" id="hc5" data-lane="champ" data-s="s5" aria-pressed="false"><span class="hn">5</span><span class="t">Champions start from a named problem, its frequency, and a KPI, not from a tool.</span><span class="box" aria-hidden="true">✓</span></button>
+      <button type="button" class="hc-item" id="hc6" data-lane="champ" data-s="s6" aria-pressed="false"><span class="hn">6</span><span class="t">We choose reuse, buy, build, or defer on purpose, and we pick the simplest form.</span><span class="box" aria-hidden="true">✓</span></button>
+      <button type="button" class="hc-item" id="hc7" data-lane="champ" data-s="s7" aria-pressed="false"><span class="hn">7</span><span class="t">Each build has a written spec with guardrails, human review points, and test cases.</span><span class="box" aria-hidden="true">✓</span></button>
+      <button type="button" class="hc-item" id="hc8" data-lane="champ" data-s="s8" aria-pressed="false"><span class="hn">8</span><span class="t">Every live solution has an owner, support, and evidence that people use it.</span><span class="box" aria-hidden="true">✓</span></button>
+    </div>
+    <aside class="hc-result" aria-live="polite">
+      <span class="lbl">Your network</span>
+      <div class="score"><span id="hc-n">0</span><small> of 8 in place</small></div>
+      <div class="meter" id="hc-meter" aria-hidden="true"><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i></div>
+      <p class="hc-msg" id="hc-msg">Mark what is true today. We will point you to the first gap.</p>
+      <button type="button" class="reset" id="hc-reset">Clear answers</button>
+    </aside>
+  </div>
+</section>
+
+<footer>
+  <div><button class="gum" type="button" data-gum aria-label="GUM-AI">GUM-AI<span class="dot" aria-hidden="true"></span></button> <span style="margin-left:8px">gum-ai.com</span></div>
+  <p>A GUM-AI synthesis based on “<a href="https://www.youtube.com/watch?v=wdXF-5nn-T4" target="_blank" rel="noopener">How to Go from AI Power User to AI Leader</a>,” The AI Daily Brief (October 2026). Ideas are paraphrased. The shared-tool rung, the evidence chain, and the health check are GUM-AI additions. Make your own decisions on authority, capacity, controls, measures, and support.</p>
+</footer>
+
+</div>
+</main>
+
+<script>
+(function(){
+  /* Scrollspy for the rail */
+  var links=[].slice.call(document.querySelectorAll('.rail nav a'));
+  var map={}; links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+  var targets=Object.keys(map).map(function(id){return document.getElementById(id);}).filter(Boolean);
+  function spy(){
+    var y=window.innerHeight*0.3, cur=targets[0];
+    targets.forEach(function(t){ if(t.getBoundingClientRect().top<=y) cur=t; });
+    links.forEach(function(a){a.classList.remove('on');});
+    if(cur&&map[cur.id]) map[cur.id].classList.add('on');
+  }
+  window.addEventListener('scroll',spy,{passive:true}); spy();
+
+  /* Health check */
+  var names={s1:'Define the job',s2:'Choose the people',s3:'Train on real work',s4:'Keep it alive',s5:'Find worthwhile work',s6:'Choose the response',s7:'Make it testable',s8:'Deploy & sustain'};
+  var items=[].slice.call(document.querySelectorAll('.hc-item'));
+  var bars=[].slice.call(document.querySelectorAll('#hc-meter i'));
+  var nEl=document.getElementById('hc-n'), msg=document.getElementById('hc-msg');
+  var KEY='gumai-champions-hc';
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(items.map(function(b){return b.getAttribute('aria-pressed')==='true';})));}catch(e){}}
+  function load(){try{var v=JSON.parse(localStorage.getItem(KEY)||'null'); if(Array.isArray(v)) items.forEach(function(b,i){b.setAttribute('aria-pressed',v[i]?'true':'false');});}catch(e){}}
+  var touched=false;
+  function render(){
+    var on=items.map(function(b){return b.getAttribute('aria-pressed')==='true';});
+    var n=on.filter(Boolean).length; nEl.textContent=n;
+    bars.forEach(function(b,i){b.classList.toggle('on',on[i]);});
+    var gap=items.find(function(b){return b.getAttribute('aria-pressed')!=='true';});
+    if(!touched&&n===0){msg.textContent='Mark what is true today. We will point you to the first gap.';return;}
+    if(n===8){msg.textContent='All eight in place. Raise the bar: review your evidence chain and refresh the charter scope.';return;}
+    var s=gap.dataset.s;
+    var side=+s.slice(1)<=4?'Part I, program setup':'Part II, use case delivery';
+    msg.innerHTML='Start with <a href="#'+s+'">stage '+s.slice(1)+': '+names[s].replace('&','&amp;')+'</a>. It is the first gap in '+side+'.';
+  }
+  items.forEach(function(b){b.addEventListener('click',function(){
+    touched=true; b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')==='true'?'false':'true'); save(); render();
+    var n=items.filter(function(x){return x.getAttribute('aria-pressed')==='true';}).length;
+    if(n===8) blowAll();
+  });});
+  document.getElementById('hc-reset').addEventListener('click',function(){items.forEach(function(b){b.setAttribute('aria-pressed','false');});touched=false;save();render();});
+  load(); if(items.some(function(b){return b.getAttribute('aria-pressed')==='true';})) touched=true; render();
+
+  /* GUM-AI bubble */
+  var gums=[].slice.call(document.querySelectorAll('[data-gum]'));
+  function blow(g){g.classList.remove('blow'); void g.offsetWidth; g.classList.add('blow'); setTimeout(function(){g.classList.remove('blow');},1150);}
+  function blowAll(){gums.forEach(blow);}
+  gums.forEach(function(g){g.addEventListener('click',function(){blow(g);});});
+})();
+</script>
+</body>
+</html>
