@@ -1,6 +1,8 @@
 # AI Champions Program Field Guide
 
-**Eight stages in two parts: set up the program, then help each champion take real use cases from idea to value.**
+**First a framework for setting up a first AI champions program or improving an existing program. Next, a detailed operating rhythm for each champion take real use cases from idea to value.**
+
+**View the guide:** [sth3000.github.io/aichampionsfieldguide](https://sth3000.github.io/aichampionsfieldguide/)
 
 A GUM-AI field guide for AI leaders who are starting an AI champions network or improving one that has lost momentum.
 
@@ -13,7 +15,7 @@ A GUM-AI field guide for AI leaders who are starting an AI champions network or 
 | [`index.html`](index.html) | The field guide. A single self-contained page with the 8-stage map, role spectrum, charter questions, build-decision ladder, and an interactive health check. | View it on the live page, or download it and open it in any browser. |
 | [`coach-prompt.md`](coach-prompt.md) | A coaching prompt. It interviews you about your program and produces a **program charter** and a **one-page visual summary**. | Copy everything below the line into Claude, ChatGPT, Gemini, or Copilot. The principles are built in, so no upload is needed. |
 
-**View the guide:** [sth3000.github.io/aichampionsfieldguide](https://sth3000.github.io/aichampionsfieldguide/)
+
 
 **Download the guide:** open [`index.html`](index.html) and select **Download raw file**, or use **Code → Download ZIP** for everything.
 
