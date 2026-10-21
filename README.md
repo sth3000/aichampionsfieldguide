@@ -1,6 +1,10 @@
 # AI Champions Program Field Guide
 
-**First a framework for setting up a first AI champions program or improving an existing program. Next, a detailed operating rhythm for each champion take real use cases from idea to value. Last, a prompt you can use with AI to guide you on your AI champion journey according to these principals.**
+**First a framework for setting up a first AI champions program or improving an existing program. 
+
+Next, a detailed operating rhythm for each champion take real use cases from idea to value. 
+
+Last, a prompt you can use with AI to guide you on your AI champion journey according to these principals.**
 
 **View the guide:** [sth3000.github.io/aichampionsfieldguide](https://sth3000.github.io/aichampionsfieldguide/)
 
